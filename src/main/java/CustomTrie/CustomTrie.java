@@ -27,11 +27,10 @@ public class CustomTrie implements Trie {
         word = sanitizeInput(word);
         if (word == null)
             return;
-
         Node cursor = root;
-        for(char c : word.toCharArray())
+        for (char c : word.toCharArray())
             cursor = cursor.children.computeIfAbsent(c, k -> new Node());
-        if(!cursor.isEnd) {
+        if (!cursor.isEnd) {
             cursor.isEnd = true;
             size++;
         }
@@ -60,9 +59,9 @@ public class CustomTrie implements Trie {
     }
 
     private void collectWords(final Node node, final StringBuilder stringBuilder, final List<String> result) {
-        if(node.isEnd)
+        if (node.isEnd)
             result.add(stringBuilder.toString());
-        for(Map.Entry<Character, Node> entry : node.children.entrySet()) {
+        for (Map.Entry<Character, Node> entry : node.children.entrySet()) {
             stringBuilder.append(entry.getKey());
             collectWords(entry.getValue(), stringBuilder, result);
             stringBuilder.deleteCharAt(stringBuilder.length() - 1);
@@ -92,16 +91,14 @@ public class CustomTrie implements Trie {
         if (input == null || input.isEmpty())
             return null;
         Node cursor = root;
-        for(char c : input.toCharArray()) {
-            cursor = cursor.children.get(c);
-            if(cursor == null)
+        for (char c : input.toCharArray())
+            if ((cursor = cursor.children.get(c)) == null)
                 return null;
-        }
         return cursor;
     }
 
     private String sanitizeInput(String s) {
-        if(s == null)
+        if (s == null)
             return null;
         String trimmed = s.trim();
         return trimmed.isEmpty() ? null : trimmed;

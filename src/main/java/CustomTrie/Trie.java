@@ -4,17 +4,17 @@ import java.util.List;
 
 public interface Trie {
 
-    void insert(String word);
-
-    boolean search(String word);
-
-    List<String> startsWith(String prefix);
+    void clear();
 
     boolean delete(String word);
 
+    void insert(String word);
+
     boolean isEmpty();
+
+    boolean search(String word);
 
     int size();
 
-    void clear();
+    List<String> startsWith(String prefix);
 }
