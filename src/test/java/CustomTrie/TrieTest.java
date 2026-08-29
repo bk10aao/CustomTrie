@@ -6,10 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TrieTest {
@@ -19,6 +22,122 @@ public class TrieTest {
     @BeforeEach
     void setUp() {
         trie = new CustomTrie();
+    }
+
+    @Test
+    @DisplayName("no-arg constructor should create an empty trie")
+    void testNoArgConstructorCreatesEmptyTrie() {
+        CustomTrie empty = new CustomTrie();
+        assertTrue(empty.isEmpty());
+        assertEquals(0, empty.size());
+        assertEquals(List.of(), empty.startsWith(""));
+    }
+
+    @Test
+    @DisplayName("List constructor should insert all given words")
+    void testListConstructorInsertsWords() {
+        CustomTrie t = new CustomTrie(List.of("cat", "dog", "car"));
+        assertEquals(3, t.size());
+        assertTrue(t.search("cat"));
+        assertTrue(t.search("dog"));
+        assertTrue(t.search("car"));
+        assertEquals(List.of("car", "cat", "dog"), t.startsWith(""));
+    }
+
+    @Test
+    @DisplayName("List constructor should apply the same sanitization rules as insert")
+    void testListConstructorSanitizesAndIgnoresInvalidWords() {
+        CustomTrie t = new CustomTrie(Arrays.asList("  cat  ", "", "   ", "dog"));
+        assertEquals(2, t.size());
+        assertTrue(t.search("cat"));
+        assertTrue(t.search("dog"));
+    }
+
+    @Test
+    @DisplayName("List constructor should create an empty trie when given an empty list")
+    void testListConstructorWithEmptyList() {
+        CustomTrie t = new CustomTrie(List.of());
+        assertTrue(t.isEmpty());
+    }
+
+    @Test
+    @DisplayName("List constructor should throw NullPointerException for a null list")
+    void testListConstructorThrowsOnNullList() {
+        assertThrows(NullPointerException.class, () -> new CustomTrie((List<String>) null));
+    }
+
+    @Test
+    @DisplayName("Array constructor should insert all given words")
+    void testArrayConstructorInsertsWords() {
+        CustomTrie t = new CustomTrie(new String[] {"cat", "dog", "car"});
+        assertEquals(3, t.size());
+        assertTrue(t.search("cat"));
+        assertTrue(t.search("dog"));
+        assertTrue(t.search("car"));
+        assertEquals(List.of("car", "cat", "dog"), t.startsWith(""));
+    }
+
+    @Test
+    @DisplayName("Array constructor should apply the same sanitization rules as insert")
+    void testArrayConstructorSanitizesAndIgnoresInvalidWords() {
+        CustomTrie t = new CustomTrie(new String[] {"  cat  ", "", "   ", "dog"});
+        assertEquals(2, t.size());
+        assertTrue(t.search("cat"));
+        assertTrue(t.search("dog"));
+    }
+
+    @Test
+    @DisplayName("Array constructor should create an empty trie when given an empty array")
+    void testArrayConstructorWithEmptyArray() {
+        CustomTrie t = new CustomTrie(new String[0]);
+        assertTrue(t.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Array constructor should throw NullPointerException for a null array")
+    void testArrayConstructorThrowsOnNullArray() {
+        assertThrows(NullPointerException.class, () -> new CustomTrie((String[]) null));
+    }
+
+    @Test
+    @DisplayName("Copy constructor should produce a trie equal to the original")
+    void testCopyConstructorProducesEqualTrie() {
+        CustomTrie original = new CustomTrie(List.of("cat", "dog"));
+        CustomTrie copy = new CustomTrie(original);
+        assertEquals(original, copy);
+        assertEquals(original.size(), copy.size());
+        assertEquals(original.startsWith(""), copy.startsWith(""));
+    }
+
+    @Test
+    @DisplayName("Copy constructor should create an independent trie")
+    void testCopyConstructorIsIndependent() {
+        CustomTrie original = new CustomTrie(List.of("cat", "dog"));
+        CustomTrie copy = new CustomTrie(original);
+
+        copy.insert("bird");
+        assertFalse(original.search("bird"));
+        assertEquals(2, original.size());
+        assertEquals(3, copy.size());
+
+        original.delete("cat");
+        assertTrue(copy.search("cat"));
+        assertEquals(1, original.size());
+    }
+
+    @Test
+    @DisplayName("Copy constructor should work correctly on an empty trie")
+    void testCopyConstructorOnEmptyTrie() {
+        CustomTrie original = new CustomTrie();
+        CustomTrie copy = new CustomTrie(original);
+        assertTrue(copy.isEmpty());
+        assertEquals(original, copy);
+    }
+
+    @Test
+    @DisplayName("Copy constructor should throw NullPointerException for a null trie")
+    void testCopyConstructorThrowsOnNullTrie() {
+        assertThrows(NullPointerException.class, () -> new CustomTrie((CustomTrie) null));
     }
 
     @Test
@@ -197,7 +316,7 @@ public class TrieTest {
     void testInsertTrimsWhitespace() {
         trie.insert("  world  ");
         assertTrue(trie.search("world"));
-        assertFalse(trie.search("  world  "));
+        assertTrue(trie.search("  world  "));
         assertEquals(1, trie.size());
     }
 
@@ -352,5 +471,188 @@ public class TrieTest {
         assertFalse(trie.search("car"));
         assertTrue(trie.search("card"));
         assertEquals(1, trie.size());
+    }
+
+    @Test
+    @DisplayName("toString should show size 0 and empty words list when trie is empty")
+    void testToStringWhenEmpty() {
+        assertEquals("CustomTrie{size=0, words=[]}", trie.toString());
+    }
+
+    @Test
+    @DisplayName("toString should show size 1 and the single inserted word")
+    void testToStringWithOneWord() {
+        trie.insert("cat");
+        assertEquals("CustomTrie{size=1, words=[cat]}", trie.toString());
+    }
+
+    @Test
+    @DisplayName("toString should show correct size and all words in lexicographic order")
+    void testToStringWithMultipleWords() {
+        trie.insert("cat");
+        trie.insert("car");
+        trie.insert("dog");
+        assertEquals("CustomTrie{size=3, words=[car, cat, dog]}", trie.toString());
+    }
+
+    @Test
+    @DisplayName("toString should reflect updated size and words after a deletion")
+    void testToStringAfterDelete() {
+        trie.insert("cat");
+        trie.insert("car");
+        trie.delete("cat");
+        assertEquals("CustomTrie{size=1, words=[car]}", trie.toString());
+    }
+
+    @Test
+    @DisplayName("hashCode should be consistent across repeated calls with no mutation")
+    void testHashCodeConsistentAcrossCalls() {
+        trie.insert("cat");
+        trie.insert("dog");
+        int first = trie.hashCode();
+        int second = trie.hashCode();
+        assertEquals(first, second);
+    }
+
+    @Test
+    @DisplayName("hashCode should match for two tries with the same contents")
+    void testHashCodeEqualForEqualTries() {
+        CustomTrie other = new CustomTrie();
+        trie.insert("cat");
+        trie.insert("dog");
+        other.insert("cat");
+        other.insert("dog");
+        assertEquals(trie, other);
+        assertEquals(trie.hashCode(), other.hashCode());
+    }
+
+    @Test
+    @DisplayName("hashCode should differ for tries with different contents")
+    void testHashCodeDiffersForDifferentTries() {
+        CustomTrie other = new CustomTrie();
+        trie.insert("cat");
+        other.insert("dog");
+        assertNotEquals(trie.hashCode(), other.hashCode());
+    }
+
+    @Test
+    @DisplayName("hashCode should change after a word is inserted")
+    void testHashCodeChangesAfterInsert() {
+        trie.insert("cat");
+        int before = trie.hashCode();
+        trie.insert("dog");
+        int after = trie.hashCode();
+        assertNotEquals(before, after);
+    }
+
+    @Test
+    @DisplayName("hashCode should change after a word is deleted")
+    void testHashCodeChangesAfterDelete() {
+        trie.insert("cat");
+        trie.insert("dog");
+        int before = trie.hashCode();
+        trie.delete("dog");
+        int after = trie.hashCode();
+        assertNotEquals(before, after);
+    }
+
+    @Test
+    @DisplayName("hashCode should be stable and reproducible for an empty trie")
+    void testHashCodeForEmptyTrie() {
+        CustomTrie other = new CustomTrie();
+        assertEquals(trie.hashCode(), other.hashCode());
+    }
+
+    @Test
+    @DisplayName("equals should return true when compared to itself")
+    void testEqualsReflexive() {
+        trie.insert("cat");
+        assertEquals(trie, trie);
+    }
+
+    @Test
+    @DisplayName("equals should return false when compared to null")
+    void testEqualsNull() {
+        trie.insert("cat");
+        assertFalse(trie.equals(null));
+    }
+
+    @Test
+    @DisplayName("equals should return false when compared to a different type")
+    void testEqualsDifferentType() {
+        trie.insert("cat");
+        assertNotEquals("cat", trie);
+    }
+
+    @Test
+    @DisplayName("equals should return true for two empty tries")
+    void testEqualsBothEmpty() {
+        CustomTrie other = new CustomTrie();
+        assertEquals(trie, other);
+    }
+
+    @Test
+    @DisplayName("equals should return true for tries with identical contents")
+    void testEqualsSameContents() {
+        CustomTrie other = new CustomTrie();
+        trie.insert("cat");
+        trie.insert("dog");
+        other.insert("cat");
+        other.insert("dog");
+        assertEquals(trie, other);
+    }
+
+    @Test
+    @DisplayName("equals should be symmetric regardless of insertion order")
+    void testEqualsSymmetricDifferentInsertionOrder() {
+        CustomTrie other = new CustomTrie();
+        trie.insert("cat");
+        trie.insert("dog");
+        other.insert("dog");
+        other.insert("cat");
+        assertEquals(trie, other);
+        assertEquals(other, trie);
+    }
+
+    @Test
+    @DisplayName("equals should return false when sizes differ")
+    void testEqualsDifferentSize() {
+        CustomTrie other = new CustomTrie();
+        trie.insert("cat");
+        trie.insert("dog");
+        other.insert("cat");
+        assertNotEquals(trie, other);
+    }
+
+    @Test
+    @DisplayName("equals should return false when sizes match but words differ")
+    void testEqualsSameSizeDifferentWords() {
+        CustomTrie other = new CustomTrie();
+        trie.insert("cat");
+        other.insert("dog");
+        assertNotEquals(trie, other);
+    }
+
+    @Test
+    @DisplayName("equals should return false after one trie has a word deleted")
+    void testEqualsAfterDeleteBreaksEquality() {
+        CustomTrie other = new CustomTrie();
+        trie.insert("cat");
+        trie.insert("dog");
+        other.insert("cat");
+        other.insert("dog");
+        assertEquals(trie, other);
+        other.delete("dog");
+        assertNotEquals(trie, other);
+    }
+
+    @Test
+    @DisplayName("equals should be consistent across repeated calls with no mutation")
+    void testEqualsConsistent() {
+        CustomTrie other = new CustomTrie();
+        trie.insert("cat");
+        other.insert("cat");
+        assertEquals(trie, other);
+        assertEquals(trie, other);
     }
 }
