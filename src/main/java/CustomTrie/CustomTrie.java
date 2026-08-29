@@ -1,36 +1,36 @@
 package CustomTrie;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class CustomTrie implements Trie {
 
-    private final Map<Character, Node> map = new HashMap<>();
+    private final Node root = new Node();
 
     private int size;
 
     public void clear() {
-        map.clear();
+        root.children.clear();
         size = 0;
     }
 
     public boolean delete(String word) {
-        return false;
+        word = sanitizeInput(word);
+        if (word == null)
+            return false;
+        return deleteHelper(root, word, 0);
     }
 
     public void insert(String word) {
+        word = sanitizeInput(word);
         if (word == null)
             return;
-        word = word.trim();
-        if (word.isEmpty())
-            return;
-        char[] chars = word.toCharArray();
-        Node cursor = map.computeIfAbsent(chars[0], k -> new Node());
-        for(int i = 1; i < chars.length; i++)
-            cursor = cursor.children.computeIfAbsent(chars[i], k -> new Node());
+
+        Node cursor = root;
+        for(char c : word.toCharArray())
+            cursor = cursor.children.computeIfAbsent(c, k -> new Node());
         if(!cursor.isEnd) {
             cursor.isEnd = true;
             size++;
@@ -42,18 +42,8 @@ public class CustomTrie implements Trie {
     }
 
     public boolean search(final String value) {
-        if (value == null || value.isEmpty())
-            return false;
-        char[] chars = value.toCharArray();
-        Node node = map.get(chars[0]);
-        if(node == null)
-            return false;
-        for(int i = 1; i < chars.length; i++) {
-            node = node.children.get(chars[i]);
-            if(node == null)
-                return false;
-        }
-        return node.isEnd;
+        Node node = findNode(value);
+        return node != null && node.isEnd;
     }
 
     public int size() {
@@ -62,19 +52,10 @@ public class CustomTrie implements Trie {
 
     public List<String> startsWith(final String prefix) {
         List<String> result = new ArrayList<>();
-        if (prefix == null || prefix.isEmpty())
-            return result;
-        char[] chars = prefix.toCharArray();
-        Node node = map.get(chars[0]);
-        if(node == null)
-            return result;
-        for(int i = 1; i < chars.length; i++) {
-            node = node.children.get(chars[i]);
-            if(node == null)
-                return result;
-        }
-        collectWords(node, new StringBuilder(prefix), result);
-        Collections.sort(result);
+        String sanitizedPrefix = sanitizeInput(prefix);
+        Node node = findNode(sanitizedPrefix);
+        if (node != null)
+            collectWords(node, new StringBuilder(sanitizedPrefix), result);
         return result;
     }
 
@@ -88,8 +69,46 @@ public class CustomTrie implements Trie {
         }
     }
 
+    private boolean deleteHelper(Node current, String word, int index) {
+        char ch = word.charAt(index);
+        Node node = current.children.get(ch);
+        if (node == null)
+            return false;
+        boolean deleted;
+        if (index == word.length() - 1) {
+            if (!node.isEnd)
+                return false;
+            node.isEnd = false;
+            size--;
+            deleted = true;
+        } else
+            deleted = deleteHelper(node, word, index + 1);
+        if (deleted && !node.isEnd && node.children.isEmpty())
+            current.children.remove(ch);
+        return deleted;
+    }
+
+    private Node findNode(String input) {
+        if (input == null || input.isEmpty())
+            return null;
+        Node cursor = root;
+        for(char c : input.toCharArray()) {
+            cursor = cursor.children.get(c);
+            if(cursor == null)
+                return null;
+        }
+        return cursor;
+    }
+
+    private String sanitizeInput(String s) {
+        if(s == null)
+            return null;
+        String trimmed = s.trim();
+        return trimmed.isEmpty() ? null : trimmed;
+    }
+
     private static class Node {
         private boolean isEnd = false;
-        private final Map<Character, Node> children = new HashMap<>();
+        private final Map<Character, Node> children = new TreeMap<>();
     }
 }
