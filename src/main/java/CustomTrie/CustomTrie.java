@@ -346,6 +346,7 @@ public class CustomTrie implements Trie {
      * some path from the root.
      */
     private static class Node {
+
         /**
          * Whether this node marks the end of a complete word.
          */
