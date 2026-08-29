@@ -143,9 +143,8 @@ public class CustomTrie implements Trie {
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof CustomTrie))
+        if (!(o instanceof CustomTrie other))
             return false;
-        CustomTrie other = (CustomTrie) o;
         return this.size == other.size
                 && this.startsWith("").equals(other.startsWith(""));
     }
