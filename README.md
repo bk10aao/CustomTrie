@@ -39,10 +39,9 @@ An Implementation of a non-compressed Prefix-Trie.
 | **`toString()`**               |          $O(W)$          |
 
 **Key**
-
-* **$L$**: Length of the sanitized input word or search value.
-* **$L_{\text{max}}$**: Maximum length of any single word in the trie (bounds recursion stack depth and `StringBuilder` buffer size).
-* **$P$**: Length of the sanitized search prefix.
-* **$M$**: Total character count across all matching words returned by a prefix query.
-* **$W$**: Total sum of character lengths across all stored words in the trie ($\sum |w_i|$).
-* **$\Sigma$**: Branching factor (number of unique child character edges at a node; introduces a $\log \Sigma$ factor for `TreeMap` lookups).
+* **$L$** - Length of the sanitized input word or search value.
+* **$L_{\text{max}}$** - Maximum length of any single word in the trie (bounds recursion stack depth and `StringBuilder` buffer size).
+* **$P$** - Length of the sanitized search prefix.
+* **$M$** - Total character count across all matching words returned by a prefix query.
+* **$W$** - Total sum of character lengths across all stored words in the trie ($\sum |w_i|$).
+* **$\Sigma$** - Branching factor (number of unique child character edges at a node; introduces a $\log \Sigma$ factor for `TreeMap` lookups).
