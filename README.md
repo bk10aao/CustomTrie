@@ -4,39 +4,39 @@ An Implementation of a non-compressed Prefix-Trie.
 
 # Time Complexity
 
-| Method                         | Time Complexity                |
-|:-------------------------------|:-------------------------------|
-| **`insert(word)`**             | $O(L \cdot \log \Sigma)$       |
-| **`search(value)`**            | $O(L \cdot \log \Sigma)$       |
-| **`delete(word)`**             | $O(L \cdot \log \Sigma)$       |
-| **`startsWith(prefix)`**       | $O((P + M) \cdot \log \Sigma)$ |
-| **`size()`**                   | $O(1)$                         |
-| **`isEmpty()`**                | $O(1)$                         |
-| **`clear()`**                  | $O(1)$                         |
-| **`CustomTrie()`**             | $O(1)$                         |
-| **`CustomTrie(List / Array)`** | $O(W \cdot \log \Sigma)$       |
-| **`CustomTrie(CustomTrie)`**   | $O(W \cdot \log \Sigma)$       |
-| **`equals(Object)`**           | $O(W \cdot \log \Sigma)$       |
-| **`hashCode()`**               | $O(W \cdot \log \Sigma)$       |
-| **`toString()`**               | $O(W \cdot \log \Sigma)$       |
+| Method                         |         Time Complexity         |
+|:-------------------------------|:-------------------------------:|
+| **`insert(word)`**             |    $O(L \cdot \log \Sigma)$     |
+| **`search(value)`**            |    $O(L \cdot \log \Sigma)$     |
+| **`delete(word)`**             |    $O(L \cdot \log \Sigma)$     |
+| **`startsWith(prefix)`**       | $O((P + M) \cdot \log \Sigma)$  |
+| **`size()`**                   |             $O(1)$              |
+| **`isEmpty()`**                |             $O(1)$              |
+| **`clear()`**                  |             $O(1)$              |
+| **`CustomTrie()`**             |             $O(1)$              |
+| **`CustomTrie(List / Array)`** |    $O(W \cdot \log \Sigma)$     |
+| **`CustomTrie(CustomTrie)`**   |    $O(W \cdot \log \Sigma)$     |
+| **`equals(Object)`**           |    $O(W \cdot \log \Sigma)$     |
+| **`hashCode()`**               |    $O(W \cdot \log \Sigma)$     |
+| **`toString()`**               |    $O(W \cdot \log \Sigma)$     |
 
 # Space Complexity
 
-| Method                         | Space Complexity        |
-|:-------------------------------|:------------------------|
-| **`insert(word)`**             | $O(L)$                  |
-| **`search(value)`**            | $O(L)$                  |
-| **`delete(word)`**             | $O(L)$                  |
-| **`startsWith(prefix)`**       | $O(M + L_{\text{max}})$ |
-| **`size()`**                   | $O(1)$                  |
-| **`isEmpty()`**                | $O(1)$                  |
-| **`clear()`**                  | $O(1)$                  |
-| **`CustomTrie()`**             | $O(1)$                  |
-| **`CustomTrie(List / Array)`** | $O(W)$                  |
-| **`CustomTrie(CustomTrie)`**   | $O(W)$                  |
-| **`equals(Object)`**           | $O(W)$                  |
-| **`hashCode()`**               | $O(W)$                  |
-| **`toString()`**               | $O(W)$                  |
+| Method                         |     Space Complexity     |
+|:-------------------------------|:------------------------:|
+| **`insert(word)`**             |          $O(L)$          |
+| **`search(value)`**            |          $O(L)$          |
+| **`delete(word)`**             |          $O(L)$          |
+| **`startsWith(prefix)`**       | $O(M + L_{\text{max}})$  |
+| **`size()`**                   |          $O(1)$          |
+| **`isEmpty()`**                |          $O(1)$          |
+| **`clear()`**                  |          $O(1)$          |
+| **`CustomTrie()`**             |          $O(1)$          |
+| **`CustomTrie(List / Array)`** |          $O(W)$          |
+| **`CustomTrie(CustomTrie)`**   |          $O(W)$          |
+| **`equals(Object)`**           |          $O(W)$          |
+| **`hashCode()`**               |          $O(W)$          |
+| **`toString()`**               |          $O(W)$          |
 
 **Key**
 
