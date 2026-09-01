@@ -3,6 +3,7 @@ package CustomTrie;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import static java.util.Objects.hash;
@@ -145,8 +146,7 @@ public class CustomTrie implements Trie {
             return true;
         if (!(o instanceof CustomTrie other))
             return false;
-        return this.size == other.size
-                && this.startsWith("").equals(other.startsWith(""));
+        return this.size == other.size && this.startsWith("").equals(other.startsWith(""));
     }
 
     /**
@@ -270,7 +270,7 @@ public class CustomTrie implements Trie {
     private void collectWords(final Node node, final StringBuilder stringBuilder, final List<String> result) {
         if (node.isEnd)
             result.add(stringBuilder.toString());
-        for (Map.Entry<Character, Node> entry : node.children.entrySet()) {
+        for (Entry<Character, Node> entry : node.children.entrySet()) {
             stringBuilder.append(entry.getKey());
             collectWords(entry.getValue(), stringBuilder, result);
             stringBuilder.deleteCharAt(stringBuilder.length() - 1);
