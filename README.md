@@ -2,6 +2,12 @@
 
 An Implementation of a non-compressed Prefix-Trie.
 
+*For the standard, non-compressed implementation, see [CustomTrie](https://github.com/bk10aao/CustomCompressedTrie).*
+
+# Build and Test
+
+To build and test the project run command `./gradlew clean build`
+
 # Time Complexity
 
 | Method                         |         Time Complexity         |
