@@ -51,3 +51,21 @@ To build and test the project run command `./gradlew clean build`
 * **$M$** - Total character count across all matching words returned by a prefix query.
 * **$W$** - Total sum of character lengths across all stored words in the trie ($\sum |w_i|$).
 * **$\Sigma$** - Branching factor (number of unique child character edges at a node; introduces a $\log \Sigma$ factor for `TreeMap` lookups).
+
+# Performance Charts
+
+#### Note: The following performance charts are designed to be viewed in dark mode.
+![constructor.png](PerformanceCharts/constructor.png)
+![constructor_collection.png](PerformanceCharts/constructor_array.png)
+![constructor_int.png](PerformanceCharts/constructor_list.png)
+![constructor_int_float.png](PerformanceCharts/copy_constructor.png)
+![add.png](PerformanceCharts/clear.png)
+![addAll.png](PerformanceCharts/delete.png)
+![clear.png](PerformanceCharts/equals.png)
+![clone.png](PerformanceCharts/hashCode.png)
+![contains.png](PerformanceCharts/insert.png)
+![containsAll.png](PerformanceCharts/isEmpty.png)
+![equals.png](PerformanceCharts/search_hit.png)
+![hashCode.png](PerformanceCharts/search_miss.png)
+![isEmpty.png](PerformanceCharts/size.png)
+![iterator.png](PerformanceCharts/startsWith.png)
