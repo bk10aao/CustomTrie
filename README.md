@@ -10,48 +10,50 @@ To build and test the project run command `./gradlew clean build`
 
 # Time Complexity
 
-| Method                         |         Time Complexity         |
-|:-------------------------------|:-------------------------------:|
-| **`insert(word)`**             |    $O(L \cdot \log \Sigma)$     |
-| **`search(value)`**            |    $O(L \cdot \log \Sigma)$     |
-| **`delete(word)`**             |    $O(L \cdot \log \Sigma)$     |
-| **`startsWith(prefix)`**       | $O((P + M) \cdot \log \Sigma)$  |
-| **`size()`**                   |             $O(1)$              |
-| **`isEmpty()`**                |             $O(1)$              |
-| **`clear()`**                  |             $O(1)$              |
-| **`CustomTrie()`**             |             $O(1)$              |
-| **`CustomTrie(List / Array)`** |    $O(W \cdot \log \Sigma)$     |
-| **`CustomTrie(CustomTrie)`**   |    $O(W \cdot \log \Sigma)$     |
-| **`equals(Object)`**           |    $O(W \cdot \log \Sigma)$     |
-| **`hashCode()`**               |    $O(W \cdot \log \Sigma)$     |
-| **`toString()`**               |    $O(W \cdot \log \Sigma)$     |
+| Method                      |                        V1                        |
+|:----------------------------|:------------------------------------------------:|
+| `Constructor()`             |                      $O(1)$                      |
+| `Constructor(List<String>)` |                $O(W \log \Sigma)$                |
+| `Constructor(String[])`     |                $O(W \log \Sigma)$                |
+| `Constructor(Trie)`         |                $O(S \log \Sigma)$                |
+| `clear()`                   |                      $O(1)$                      |
+| `delete(String)`            |                $O(L \log \Sigma)$                |
+| `equals(Object)`            |                $O(S \log \Sigma)$                |
+| `hashCode()`                |                $O(S \log \Sigma)$                |
+| `insert(String)`            |                $O(L \log \Sigma)$                |
+| `isEmpty()`                 |                      $O(1)$                      |
+| `search(String)`            |                $O(L \log \Sigma)$                |
+| `size()`                    |                      $O(1)$                      |
+| `startsWith(String)`        | $O(P \log \Sigma + L_{\text{out}} \log \Sigma)$  |
+| `toString()`                |                $O(S \log \Sigma)$                |
 
 # Space Complexity
 
-| Method                         |     Space Complexity     |
-|:-------------------------------|:------------------------:|
-| **`insert(word)`**             |          $O(L)$          |
-| **`search(value)`**            |          $O(L)$          |
-| **`delete(word)`**             |          $O(L)$          |
-| **`startsWith(prefix)`**       | $O(M + L_{\text{max}})$  |
-| **`size()`**                   |          $O(1)$          |
-| **`isEmpty()`**                |          $O(1)$          |
-| **`clear()`**                  |          $O(1)$          |
-| **`CustomTrie()`**             |          $O(1)$          |
-| **`CustomTrie(List / Array)`** |          $O(W)$          |
-| **`CustomTrie(CustomTrie)`**   |          $O(W)$          |
-| **`equals(Object)`**           |          $O(W)$          |
-| **`hashCode()`**               |          $O(W)$          |
-| **`toString()`**               |          $O(W)$          |
+| Method                               |               V1               |
+|:-------------------------------------|:------------------------------:|
+| `Constructor()`                      |             $O(1)$             |
+| `Constructor(List<String>)`          |             $O(1)$             |
+| `Constructor(String[])`              |             $O(1)$             |
+| `Constructor(Trie)`                  |             $O(S)$             |
+| `clear()`                            |             $O(1)$             |
+| `delete(String)`                     |             $O(L)$             |
+| `equals(Object)`                     |             $O(S)$             |
+| `hashCode()`                         |             $O(S)$             |
+| `insert(String)`                     |             $O(1)$             |
+| `isEmpty()`                          |             $O(1)$             |
+| `search(String)`                     |             $O(1)$             |
+| `size()`                             |             $O(1)$             |
+| `startsWith(String)`                 | $O(L_{\text{out}} + L_{\max})$ |
+| `toString()`                         |             $O(S)$             |
 
 **Key**
 * **$L$** - Length of the sanitized input word or search value.
-* **$L_{\text{max}}$** - Maximum length of any single word in the trie (bounds recursion stack depth and `StringBuilder` buffer size).
+* **$L_{\max}$** - Maximum length of any single word in the trie (bounds recursion stack depth and `StringBuilder` buffer size).
+* **$L_{\text{out}}$** - Total character count across all matching words returned by a prefix query.
 * **$P$** - Length of the sanitized search prefix.
-* **$M$** - Total character count across all matching words returned by a prefix query.
+* **$S$** - Total number of nodes in the trie structure.
 * **$W$** - Total sum of character lengths across all stored words in the trie ($\sum |w_i|$).
 * **$\Sigma$** - Branching factor (number of unique child character edges at a node; introduces a $\log \Sigma$ factor for `TreeMap` lookups).
-
 # Performance Charts
 
 #### Note: The following performance charts are designed to be viewed in dark mode.
@@ -69,3 +71,4 @@ To build and test the project run command `./gradlew clean build`
 ![hashCode.png](PerformanceCharts/search_miss.png)
 ![isEmpty.png](PerformanceCharts/size.png)
 ![iterator.png](PerformanceCharts/startsWith.png)
+![iterator.png](PerformanceCharts/toString.png)
